@@ -1,0 +1,24 @@
+import pygame, random, sys; pygame.init()
+s = pygame.display.set_mode((400,600)); p, b, e, bt, et = pygame.Rect(200, 500, 30, 30), []
+while True:
+	s.fill((0, 0, 0))
+	for ev in pygame.event.get():
+		if ev.type == pygame.QUIT: sys.exit()
+		k = pygame.key.get_pressed()
+		if k[pygame.K_LEFT] and p.left > 0: p.move_ip(-5, 0)
+		if k[pygame.K_RIGHT] and p.right < 400: p.move_ip(5, 0)
+		if k[pygame.K_SPACE] and bt == 0: b.append(pygame.Rect(p.centerx - 2, p.top, 4, 10)); bt = 2
+		if bt > 0: bt -= 1
+		for i in b[:]:
+			i.move_ip(0, -5)
+			if i.bottom < 0: b.remove(i)
+			for i in e[:]:
+				i.move_ip(0, 2)
+				if i.top > 600: e.remove(i)
+				if p.colliderect(i): sys.exit()
+				for i in b[:]:
+					for j in e[:]:
+						if i.colliderect(j): b.remove(i); e.remove(j)
+						if et == 0: e.append(pygame.Rect(random.randint(0,370), 0, 30, 30)); et = 50; et = 1
+						[pygame.draw.rect(s, (255, 255, 0), i) for i in b]; [pygame.draw.rect(s, (255, 0, 0), i) for i in e];
+						pygame.draw.rect(s, (0, 255, 0), p); pygame.display.flip(); pygame.time.Clock().t
